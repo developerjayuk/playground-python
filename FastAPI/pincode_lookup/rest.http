@@ -1,0 +1,31 @@
+### Root Endpoint
+GET http://127.0.0.1:8000/
+
+
+### Health Check
+GET http://127.0.0.1:8000/health
+
+
+### Pincode Lookup valid
+GET http://127.0.0.1:8000/pincode/123456
+
+
+### Pincode Lookup error
+GET http://127.0.0.1:8000/pincode/457846
+
+
+### Pincode Lookup error
+GET http://127.0.0.1:8000/pincode/45784
+
+
+### Bulk Pincode Lookup
+POST http://127.0.0.1:8000/pincode/bulk
+Content-Type: application/json
+
+{
+  "pincodes": [
+    "123456",
+    "789012",
+    "345678"
+  ]
+}
