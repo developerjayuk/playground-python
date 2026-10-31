@@ -1,0 +1,149 @@
+@baseUrl = http://127.0.0.1:8000
+@playName = Hamilton
+@reviewId = 1
+
+
+### Create a review
+POST {{baseUrl}}/review/
+Content-Type: application/json
+
+{
+  "play_name": "Hamilton",
+  "reviewer_name": "Jay",
+  "rating": 5,
+  "comment": "Fantastic show, great cast."
+}
+
+
+### Create another review for the same play
+POST {{baseUrl}}/review/
+Content-Type: application/json
+
+{
+  "play_name": "Hamilton",
+  "reviewer_name": "Sam",
+  "rating": 4,
+  "comment": "Loved the music, a bit long."
+}
+
+
+### Create a review with an invalid rating (expect 422)
+POST {{baseUrl}}/review/
+Content-Type: application/json
+
+{
+  "play_name": "Hamilton",
+  "reviewer_name": "Jay",
+  "rating": 6,
+  "comment": "Rating is out of range."
+}
+
+
+### List reviews (defaults: skip=0, limit=10)
+GET {{baseUrl}}/review/
+
+
+### List reviews filtered by play name
+GET {{baseUrl}}/review/?play_name={{playName}}
+
+
+### List reviews with pagination
+GET {{baseUrl}}/review/?skip=0&limit=5
+
+
+### List reviews with invalid limit (expect 422, max is 50)
+GET {{baseUrl}}/review/?limit=100
+
+
+### Average rating for a play
+GET {{baseUrl}}/review/average/{{playName}}
+
+
+### Average rating for a play with no reviews (expect 404)
+GET {{baseUrl}}/review/average/Nonexistent Play
+
+
+### Get a single review by id
+GET {{baseUrl}}/review/{{reviewId}}
+
+
+### Get a review that does not exist (expect 404)
+GET {{baseUrl}}/review/9999
+
+
+### Partially update a review (only rating)
+PATCH {{baseUrl}}/review/{{reviewId}}
+Content-Type: application/json
+
+{
+  "rating": 1
+}
+
+
+### Partially update a review (rating and comment)
+PATCH {{baseUrl}}/review/{{reviewId}}
+Content-Type: application/json
+
+{
+  "rating": 4,
+  "comment": "Changed my mind, really enjoyed it."
+}
+
+
+### Partially update with an invalid rating (expect 422)
+PATCH {{baseUrl}}/review/{{reviewId}}
+Content-Type: application/json
+
+{
+  "rating": 0
+}
+
+
+### Partially update a review that does not exist (expect 404)
+PATCH {{baseUrl}}/review/9999
+Content-Type: application/json
+
+{
+  "rating": 3
+}
+
+
+### Replace a review (all fields required)
+PUT {{baseUrl}}/review/{{reviewId}}
+Content-Type: application/json
+
+{
+  "play_name": "Hamilton",
+  "reviewer_name": "Jay",
+  "rating": 5,
+  "comment": "Replaced the whole review."
+}
+
+
+### Replace with missing fields (expect 422)
+PUT {{baseUrl}}/review/{{reviewId}}
+Content-Type: application/json
+
+{
+  "rating": 5
+}
+
+
+### Replace a review that does not exist (expect 404)
+PUT {{baseUrl}}/review/9999
+Content-Type: application/json
+
+{
+  "play_name": "Hamilton",
+  "reviewer_name": "Jay",
+  "rating": 5,
+  "comment": "No such review."
+}
+
+
+### Delete a review (expect 204)
+DELETE {{baseUrl}}/review/{{reviewId}}
+
+
+### Delete a review that does not exist (expect 404)
+DELETE {{baseUrl}}/review/9999

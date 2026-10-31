@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 
 from sqlmodel import Field, SQLModel
 
@@ -9,7 +9,7 @@ class Review(SQLModel, table=True):
     reviewer_name: str
     rating: int = Field(ge=1, le=5)
     comment: str
-    created_at: datetime = Field(default_factory=datetime.now)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 class ReviewCreate(SQLModel):
